@@ -1,5 +1,6 @@
 const { Schema, model } = require("mongoose");
 const { isEmail } = require("validator");
+const { ObjectId } = require('mongoose').Types;
 
 // Creating Blueprint for what we want User documents to look like
 const userSchema = new Schema({

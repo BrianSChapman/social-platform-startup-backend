@@ -1,14 +1,16 @@
+const Thought = require("../models/thought");
 const User = require("../models/User");
+const { ObjectId } = require("mongoose").Types;
 
 // Modularizing and exporting these back to the user API route.
 module.exports = {
-
   // Find all users
   getUsers(req, res) {
     User.find()
       .then((users) => res.json(users))
       .catch((err) => res.status(500).json(err));
   },
+
   //   Find a user based upon userId
   getSingleUser(req, res) {
     User.findOne({ _id: req.params.userId })
@@ -23,6 +25,7 @@ module.exports = {
       )
       .catch((err) => res.status(500).json(err));
   },
+
   //   Create a new user
   createUser(req, res) {
     User.create(req.body)
@@ -46,14 +49,53 @@ module.exports = {
       )
       .catch((err) => res.status(500).json(err));
   },
+
+  //   delete user by ID and all Thoughts associated with the account
   deleteUser(req, res) {
-    User.findOneAndDelete({ _id: req.params.userId }
-        .then((user) => 
-        !user 
-        ? res.status(404).json({ message: "This user does not exist. Try again please"})
-        
+    User.findOneAndDelete(
+      { _id: req.params.userId }
+        .then((user) =>
+          !user
+            ? res
+                .status(404)
+                .json({ message: "This user does not exist. Try again please" })
+            : Thought.deleteMany({ _id: { $in: User.thoughts } })
+        )
+        .then(() => res.json({ message: "User successfully deleted" }))
+        .catch((err) => res.status(500).json(err))
+    );
+  },
 
+  //   Add a new friend to a user's friend list
+  addFriend(req, res) {
+    User.findOneAndUpdate(
+      { _id: req.params.userId },
+      { $addToSet: { friends: req.body } },
+      { runValidators: true, new: true }
     )
-  }
-
+      .then((user) =>
+        !user
+          ? res
+              .status(404)
+              .json({ message: "Unable to find user. Try again please." })
+          : res.json(user)
+      )
+      .catch((err) => res.status(500).json(err));
+  },
+  // Find a Friend by ID and delete them from a User's friend list
+  deleteFriend(req, res) {
+    User.findOneAndUpdate(
+      { _id: req.params.userId },
+      { $pull: { friends: { _id: req.params.userId } } },
+      { runValidators: true, new: true }
+    )
+      .then((user) =>
+        !user
+          ? res
+              .status(404)
+              .json({ message: "Unable to dins user. Try again please." })
+          : res.json(user)
+      )
+      .catch((err) => res.status(500).json(err));
+  },
 };
