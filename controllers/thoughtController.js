@@ -1,7 +1,6 @@
 const Thought = require("../models/Thought");
 const User = require("../models/user");
 // const Reaction = require('../models/Reaction');
-const { ObjectId } = require("mongoose").Types;
 
 module.exports = {
   // Get all Thoughts
