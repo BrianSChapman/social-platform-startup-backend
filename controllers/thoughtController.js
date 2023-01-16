@@ -1,4 +1,3 @@
-const { ObjectID } = require("bson");
 const Thought = require("../models/Thought");
 const User = require("../models/User");
 const { ObjectId } = require("mongoose").Types;
@@ -16,7 +15,7 @@ module.exports = {
   // Get a single Thought by ID
   getSingleThought(req, res) {
     Thought.findOne({ _id: req.params.thoughtId })
-      .select("__v")
+      .select("-__v")
       .then((thought) =>
         !thought
           ? res.status(404).json({ message: "Unable to find this thought." })
