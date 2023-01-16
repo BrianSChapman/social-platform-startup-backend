@@ -64,8 +64,27 @@ deleteThought(req, res) {
 createReaction(req, res) {
     Thought.findOneAndUpdate(
         { _id: req.params.id},
-        { $addToSet: { reactions: req.body } },
+        { $push: { reactions: reaction._id } },
         { runValidators: true, new: true }
     )
+    .then((thought) => 
+    !thought ? res.status(404).json({ message:'Unable to find this thought.' })
+    : res.json(thought)
+    )
+    .catch((err) => res.status(500).json(err)) 
+},
+
+// Remove a reaction from a Thought by ReactionId
+deleteReaction(req, res) {
+    Thought.findOneAndUpdate(
+        { _id: req.params.thoughtId },
+        { $pull: { reactions: { reactionId: req.params.reactionId } } },
+        { runValidators: true, new: true }
+    )
+    .then((thought) =>
+        !thought ? res.status(404).json({ message: 'Unable to find this thought.'})
+        : res.json(thought)
+    )
+    .catch((err) => res.status(500).json(err));
 }
 };
