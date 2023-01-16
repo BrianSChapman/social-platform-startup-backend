@@ -15,7 +15,7 @@ module.exports = {
   // Get a single Thought by ID
   getSingleThought(req, res) {
     Thought.findOne({ _id: req.params.thoughtId })
-      .select("-__v")
+      .select("__v")
       .then((thought) =>
         !thought
           ? res.status(404).json({ message: "Unable to find this thought." })
@@ -67,7 +67,7 @@ module.exports = {
   createReaction(req, res) {
     Thought.findOneAndUpdate(
       { _id: req.params.id },
-      { $push: { reactions: reaction._id } },
+      { $push: { reactions: req.body } },
       { runValidators: true, new: true }
     )
       .then((thought) =>
