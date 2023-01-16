@@ -1,12 +1,11 @@
-const Thought = require("../models/thought");
 const User = require("../models/User");
-const { ObjectId } = require("mongoose").Types;
 
 // Modularizing and exporting these back to the user API route.
 module.exports = {
   // Find all users
   getUsers(req, res) {
     User.find()
+      .select("-__v")
       .then((users) => res.json(users))
       .catch((err) => res.status(500).json(err));
   },
@@ -52,17 +51,16 @@ module.exports = {
 
   //   delete user by ID and all Thoughts associated with the account
   deleteUser(req, res) {
-    User.findOneAndDelete(
-      { _id: req.params.userId })
-        .then((user) =>
-          !user
-            ? res
-                .status(404)
-                .json({ message: "This user does not exist. Try again please" })
-            : Thought.deleteMany({ _id: { $in: User.thoughts } })
-        )
-        .then(() => res.json({ message: "User successfully deleted" }))
-        .catch((err) => res.status(500).json(err))
+    User.findOneAndDelete({ _id: req.params.userId })
+      .then((user) =>
+        !user
+          ? res
+              .status(404)
+              .json({ message: "This user does not exist. Try again please" })
+          : Thought.deleteMany({ _id: { $in: User.thoughts } })
+      )
+      .then(() => res.json({ message: "User successfully deleted" }))
+      .catch((err) => res.status(500).json(err));
   },
 
   //   Add a new friend to a user's friend list
