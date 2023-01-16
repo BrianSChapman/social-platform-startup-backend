@@ -15,7 +15,7 @@ module.exports = {
   getSingleUser(req, res) {
     User.findOne({ _id: req.params.userId })
       // omitting the version key in our returned information
-      .select("__v")
+      .select("-__v")
       .then((user) =>
         !user
           ? res
@@ -53,7 +53,7 @@ module.exports = {
   //   delete user by ID and all Thoughts associated with the account
   deleteUser(req, res) {
     User.findOneAndDelete(
-      { _id: req.params.userId }
+      { _id: req.params.userId })
         .then((user) =>
           !user
             ? res
@@ -63,7 +63,6 @@ module.exports = {
         )
         .then(() => res.json({ message: "User successfully deleted" }))
         .catch((err) => res.status(500).json(err))
-    );
   },
 
   //   Add a new friend to a user's friend list

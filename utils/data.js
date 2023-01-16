@@ -17,7 +17,7 @@ const userSeed = [
   },
   {
     username: "BernardTheMallardBear",
-    email: "partMallardPartBear",
+    email: "partMallardPartBear@gmail.com",
   },
 ];
 
