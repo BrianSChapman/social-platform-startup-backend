@@ -14,8 +14,8 @@ module.exports = {
 
   // Get a single Thought by ID
   getSingleThought(req, res) {
-    Thought.findOne({ _id: req.params.id })
-      .select("__v")
+    Thought.findOne({ _id: req.params.thoughtId })
+      .select("-__v")
       .then((thought) =>
         !thought
           ? res.status(404).json({ message: "Unable to find this thought." })
@@ -66,7 +66,7 @@ module.exports = {
   // Create a reaction to be stored in a Thought's 'reactions' array field
   createReaction(req, res) {
     Thought.findOneAndUpdate(
-      { _id: req.params.id },
+      { _id: req.params.thoughtId },
       { $push: { reactions: req.body } },
       { runValidators: true, new: true }
     )
@@ -82,7 +82,7 @@ module.exports = {
   deleteReaction(req, res) {
     Thought.findOneAndUpdate(
       { _id: req.params.thoughtId },
-      { $pull: { reactions: { reactionId: req.params.reactionId } } },
+      { $pull: { reactions: { reactionId: req.params.id } } },
       { runValidators: true, new: true }
     )
       .then((thought) =>
