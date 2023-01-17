@@ -13,20 +13,21 @@ const userSchema = new Schema({
     type: String,
     unique: true,
     required: true,
+    lowercase:true,
     validate: isEmail,
   },
 //   establishing relationship with Thought Schema
   thoughts: [
     {
       type: Schema.Types.ObjectId,
-      ref: "Thought",
+      ref: 'thought',
     },
   ],
 //   Self-referencing the User table 
   friends: [
     {
       type: Schema.Types.ObjectId,
-      ref: "User",
+      ref: 'user',
     },
   ],
 },

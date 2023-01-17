@@ -84,14 +84,14 @@ module.exports = {
   deleteFriend(req, res) {
     User.findOneAndUpdate(
       { _id: req.params.userId },
-      { $pull: { friends: { _id: req.params.friendId } } },
+      { $pull: { friends: req.params.friendId  } },
       { new: true }
     )
       .then((user) =>
         !user
           ? res
               .status(404)
-              .json({ message: "Unable to dins user. Try again please." })
+              .json({ message: "Unable to find user. Try again please." })
           : res.json(user)
       )
       .catch((err) => res.status(500).json(err));

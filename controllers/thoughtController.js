@@ -24,15 +24,17 @@ module.exports = {
 
   //   create a new Thought and add it to user's existing Thought's array field.
   createThought(req, res) {
-    Thought.create(req.body).then((thought) => res.json(thought));
-    User.findOneAndUpdate(
+    Thought.create(req.body).then((thought) => { 
+    return User.findOneAndUpdate(
       { _id: req.params.id },
       { $addToSet: { thoughts: req.body } },
-      { runValidators: true, new: true }
+      { new: true }
     ).catch((err) => {
       console.log(err);
       return res.status(500).json(err);
-    });
+    
+    })
+  });
   },
 
   //  Update an existing Thought, targeting by ID
@@ -66,7 +68,7 @@ module.exports = {
     Thought.findOneAndUpdate(
       { _id: req.params.thoughtId },
       { $push: { reactions: req.body } },
-      { runValidators: true, new: true }
+      { new: true }
     )
       .then((thought) =>
         !thought
@@ -81,7 +83,7 @@ module.exports = {
     Thought.findOneAndUpdate(
       { _id: req.params.thoughtId },
       { $pull: { reactions: { reactionId: req.params.id } } },
-      { runValidators: true, new: true }
+      {new: true }
     )
       .then((thought) =>
         !thought
