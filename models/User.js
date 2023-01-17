@@ -1,4 +1,4 @@
-const { Schema, model, Types } = require("mongoose");
+const { Schema, model } = require("mongoose");
 const { isEmail } = require("validator");
 
 // Creating Blueprint for what we want User documents to look like

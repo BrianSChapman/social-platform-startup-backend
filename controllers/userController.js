@@ -1,6 +1,7 @@
 const User = require("../models/User");
-const { ObjectId } = require("mongoose").Types;
+
 // Modularizing and exporting these back to the user API route.
+
 module.exports = {
   // Find all users
   getUsers(req, res) {

@@ -24,6 +24,7 @@ const thoughtSchema = new mongoose.Schema(
     reactions: [reactionSchema],
   },
   {
+    timestamps: true,
     toJSON: {
       virtuals: true,
     },
