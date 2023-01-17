@@ -27,6 +27,7 @@ const thoughtSchema = new mongoose.Schema(
     timestamps: true,
     toJSON: {
       virtuals: true,
+      getters: true
     },
     id: false,
   }
