@@ -14,7 +14,7 @@ module.exports = {
 
   // Get a single Thought by ID
   getSingleThought(req, res) {
-    Thought.findOne({ _id: req.params.thoughtId })
+    Thought.findOne({ _id: req.params.id })
       .select("__v")
       .then((thought) =>
         !thought
@@ -28,7 +28,7 @@ module.exports = {
   createThought(req, res) {
     Thought.create(req.body).then((thought) => res.json(thought));
     User.findOneAndUpdate(
-      { _id: req.params.userId },
+      { _id: req.params.id },
       { $addToSet: { thoughts: req.body } },
       { runValidators: true, new: true }
     ).catch((err) => {
